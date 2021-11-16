@@ -16,7 +16,6 @@ body {
 
 .header {
   display: flex;
-  height: 55px;
   background: #261f32;
   align-items: center;
   justify-content: space-between;
@@ -50,6 +49,7 @@ body {
 .main {
   display: flex;
   flex-shrink: 2;
+  flex-wrap: wrap;
   height: 100%;
   width: 100%;
   background: #4f465c;
@@ -76,9 +76,14 @@ body {
 }
 
 .button:active {
-  transform: scale(.98);
+  transform: scale(0.98);
 }
 
 .button_link {
   text-decoration: none;
+}
+
+.annotation {
+  max-width: 250px;
+  text-align: justify;
 }

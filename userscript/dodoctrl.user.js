@@ -1,10 +1,12 @@
 // ==UserScript==
 // @name            DodoCTRL
 // @namespace       https://dodoctrl.github.io/
-// @version         0.1
+// @version         0.1.1
 // @author          Ilia Bayanov https://vk.com/ilia_bayanov
 // @description     Automatic registration for quality control in Dodo Pizza
 // @description:ru  Автоматическая регистрация на проверку в Додо Пицце
+// @updateURL       https://github.com/dodoctrl/dodoctrl.github.io/raw/main/userscript/dodoctrl.user.js
+// @downloadURL     https://github.com/dodoctrl/dodoctrl.github.io/raw/main/userscript/dodoctrl.user.js
 // @match           https://lk.dodocontrol.ru/
 // @icon            https://lk.dodocontrol.ru/images/personalarea/favicon-16x16.png
 // @run-at          document-body
@@ -14,7 +16,7 @@
 (() => {
   'use strict';
 
-  // КОНСТАНТЫ
+  // ==КОНСТАНТЫ==
   // Номер пиццерии, в которой надо занять проверку, как она отображается на странице, НЕ индекс в HTML-коллекции.
   const PIZZERIA = 1;
   // Тип проверки, которую надо занять, 1 - доставка, 2 - ресторан, 3 - инспекция.
@@ -35,6 +37,7 @@
   // Не рекомендую ставить больше 60 минут, считаю оптимальным обновлять страницу раз в пол часа.
   const NIGHT_TIMER = 30;
   const NIGHT_BEGINS = 21;
+  // ==/КОНСТАНТЫ==
 
   const getOpenCheck = () => {
     const pizzerias = document.getElementsByClassName('pizzeria__list');
@@ -88,7 +91,7 @@
 
   const setReloadTimeOut = () => {
     const now = new Date();
-    let reloadTimeOut = USUAL_TIMER;
+    let reloadTimeOut = USUAL_TIMER * 1000;
 
     if ((now.getHours() >= NIGHT_BEGINS) || (now.getHours() < MORNING_BEGINS)) { reloadTimeOut = NIGHT_TIMER * 60 * 1000 }
 
@@ -104,6 +107,7 @@
 
     if (date) {
       clearTimeout(timerReload);
+      observer.disconnect();
       saveRoot();
       date.click();
       saveRoot();
