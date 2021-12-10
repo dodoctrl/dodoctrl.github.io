@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name            DodoCTRL
 // @namespace       https://dodoctrl.github.io/
-// @version         0.1.2
+// @version         1.0.0
 // @author          Ilia Bayanov https://vk.com/ilia_bayanov
 // @description     Automatic registration for quality control in Dodo Pizza
 // @description:ru  Автоматическая регистрация на проверку в Додо Пицце
@@ -51,18 +51,10 @@
     }
   };
 
-  const pushButtonWithTextInside = (text, parent = document) => {
-    if (parent.children.length) {
-      for (let elem of parent.children) {
-        if (elem.innerHTML === text) {
-          elem.click();
+  const findElementWithTextInside = (text, parent = document) => {
+    const allElements = parent.getElementsByTagName('*');
 
-          return;
-        } else {
-          pushButtonWithTextInside(text, elem);
-        }
-      }
-    }
+    return [...allElements].find(item => item.innerText === text);
   };
 
   const setNameOfDateNow = () => {
@@ -75,6 +67,45 @@
     const year = now.getFullYear();
 
     return `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
+  };
+
+  const siren = (freq = 500, vol = 0.1) => {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    oscillator.type = "square";
+    oscillator.frequency.value = freq;
+    oscillator.connect(gainNode);
+    gainNode.gain.value = vol;
+    gainNode.connect(audioCtx.destination);
+
+    let up = false;
+    let i = 0;
+
+    const freqChanger = (Hz) => {
+      if (i % 25 === 0) { up = !up }
+
+      if (i < 150) {
+        i++;
+        oscillator.frequency.value = Hz;
+        setTimeout(() => {
+          if (up) {
+            freqChanger(Hz + 20);
+
+            return;
+          }
+          freqChanger(Hz - 20);
+        });
+
+        return;
+      }
+
+      oscillator.stop();
+    };
+
+    oscillator.start();
+    freqChanger(freq + 20);
   };
 
   const saveRoot = () => {
@@ -108,13 +139,14 @@
     if (date) {
       clearTimeout(timerReload);
       observer.disconnect();
+      siren();
       saveRoot();
       date.click();
       saveRoot();
       setTimeout(() => {
         document.querySelector('.pizzeria__button_primary').click();
         saveRoot();
-        setTimeout(pushButtonWithTextInside, 0, 'Принимаю проверку');
+        setTimeout(() => findElementWithTextInside('Принимаю проверку').click());
       });
     } else {
       clearTimeout(timerReload);
