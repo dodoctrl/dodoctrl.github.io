@@ -54,7 +54,7 @@
   const findElementWithTextInside = (text, parent = document) => {
     const allElements = parent.getElementsByTagName('*');
 
-    return [...allElements].find(item => item.innerText === text);
+    return [...allElements].find(item => item.innerHTML === text);
   };
 
   const setNameOfDateNow = () => {
