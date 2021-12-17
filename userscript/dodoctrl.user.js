@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name            DodoCTRL
 // @namespace       https://dodoctrl.github.io/
-// @version         1.0.0
+// @version         1.0.1
 // @author          Ilia Bayanov https://vk.com/ilia_bayanov
 // @description     Automatic registration for quality control in Dodo Pizza
 // @description:ru  Автоматическая регистрация на проверку в Додо Пицце
